@@ -1,5 +1,36 @@
-//your JS code here.
+function saveAnswers() {
+  const radios = document.querySelectorAll("input[type=radio]");
+  radios.forEach(radio => {
+    if (radio.checked) {
+      const qIndex = parseInt(radio.name.split("-")[1]);
+      userAnswers[qIndex] = radio.value;
+    }
+  });
+  sessionStorage.setItem("userAnswers", JSON.stringify(userAnswers));
+}
 
+function showScore() {
+  let score = 0;
+  for (let i = 0; i < questions.length; i++) {
+    if (userAnswers[i] === questions[i].answer) {
+      score++;
+    }
+  }
+  document.getElementById("score").textContent = Your score is ${score} out of ${questions.length}.;
+  localStorage.setItem("score", score);
+}
+
+const savedScore = localStorage.getItem("score");
+if (savedScore !== null) {
+  document.getElementById("score").textContent = Your score is ${savedScore} out of ${questions.length}.;
+}
+
+document.getElementById("questions").addEventListener("change", saveAnswers);
+
+document.getElementById("submit").addEventListener("click", () => {
+  saveAnswers();
+  showScore();
+});
 // Do not change code below this line
 // This code will just display the questions to the screen
 const questions = [
